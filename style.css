@@ -1,0 +1,512 @@
+   body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f9f9f9;
+        margin-top: 100px; /* Espaço para o cabeçalho */
+    }
+
+
+.btn-desmarcar {
+    margin-top: 5px;
+    background-color: red;
+    color: white;
+    padding: 8px 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.loading-screen__logo {
+  width: 250px;  /* Ajuste o tamanho como desejar */
+  margin-bottom: 20px;  /* Espaço entre o logo e o loader */
+}
+
+.loading-screen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(180deg, #000000, #333333); /* Gradiente vertical de cima para baixo */
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.3s ease-in-out;
+}
+
+
+.loader {
+  border: 8px solid rgba(255, 255, 255, 0.3);
+  border-top: 8px solid white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1.5s linear infinite;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-screen__text {
+  margin-left: 5px;
+  margin-right: 5px;
+  color: white;
+  margin-top: 20px;
+  font-size: 25px;
+  text-align: center; /* Centraliza o texto */
+}
+    #produtos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+       box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Adicionado para sombra */
+    }
+
+    .card img {
+        max-width: 100%;
+        border-radius: 4px;
+        display: block;
+        margin: auto;
+    }
+
+    .card-title {
+        font-size: 1.2em;
+        margin: 0 0 10px;
+    }
+
+    .card-text {
+        margin: 0;
+    }
+
+    @media(min-width: 768px) {
+        .card {
+            width: calc(33.333% - 20px);
+        }
+    }
+
+    #header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        background-color: #008CBA;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #contador {
+        margin-left: 10px;
+        background-color: #a80303;
+        color: #fff;
+        border-radius: 50%;
+        padding: 5px 10px;
+    }
+
+     
+
+#detalhesCarrinho {
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    position: relative;
+}
+
+#detalhesCarrinho::-webkit-scrollbar {
+    margin-right:25px;
+    width: 20px;
+    border-radius: 10px;  /* Você pode ajustar esse valor conforme necessário */
+}
+
+#detalhesCarrinho::-webkit-scrollbar-track {
+    background-color: #06078c;
+    border-radius: 15px;  /* Você pode ajustar esse valor conforme necessário */
+}
+
+#detalhesCarrinho::-webkit-scrollbar-thumb {
+    background-color: #b5c2f8;
+    border-radius: 50px;  /* Você pode ajustar esse valor conforme necessário */
+}
+
+#detalhesCarrinho::-webkit-scrollbar-thumb:hover {
+    background-color: #000;
+}
+
+
+
+#detalhesCarrinho .lista-itens {
+    margin-right: 5%;
+}
+
+#detalhesCarrinho .footer-carrinho {
+    padding-top:2px;
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;  /* Altere a cor de fundo conforme necessário */
+    /* Adicione outros estilos conforme necessário */
+}
+
+    #header.ativo #detalhesCarrinho {
+        display: block;
+    }
+
+
+.foto-inacio {
+    border-radius: 50%;  /* Faz a imagem ficar redonda */
+    width: 80px;        /* Define a largura */
+    height: 80px;       /* Define a altura */
+    object-fit: cover;   /* Certifica que a imagem irá cobrir toda a área */
+    margin-right: 10px;  /* Espaçamento à direita */
+}
+ .instrucoes {
+     margin-top: -15%;
+     display: flex;        /* Ativa o flexbox */
+    align-items: center;  /* Centraliza verticalmente */
+        background-color: #e0f7fa;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        font-size: 1em;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Adicionado para sombra */
+    }
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.modal-content {
+    max-height: 80vh;  /* Altura máxima de 80% da altura da viewport */
+    overflow-y: auto;  /* Habilitar rolagem vertical automática quando necessário */
+    background-color: #fefefe;
+    margin: -5% 5%;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 8px; /* Adicionado para bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Adicionado para sombra */
+    padding-bottom: 40px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* CSS adicionado para mostrar o modal */
+.modal.show {
+    display: block;
+    opacity: 1;
+}
+
+.modal-verificar-carrinho {
+    display: none;  /* Mantido para compatibilidade com seu código JS */
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.7);  /* Adicionado para efeito de "emergir" */
+    transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;  /* Atualizado para incluir transform */
+}
+
+.modal-verificar-carrinho.show {
+    display: block;  /* Mantido para compatibilidade com seu código JS */
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);  /* Adicionado para efeito de "emergir" */
+}
+
+.modal-verificar-carrinho .modal-content {
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    max-height: 80vh;
+    overflow-y: auto;
+    margin: -5% 5%;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    padding-bottom: 40px;
+    transition: all 0.3s ease;  /* Adicionado para transições suaves */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;  /* Adicionado para indicar interatividade */
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-verificar-carrinho .btn-modal {
+    background-color: #007BFF;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    padding: 10px 20px;
+    margin: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition: background-color 0.3s ease;  /* Adicionado para uma transição suave */
+}
+
+
+
+
+
+
+.product-line {
+    font-size: 0.9em;
+    color: #555;
+    margin: 0 0 10px;
+}
+
+.btn-info {
+    background-color:  #ed6415; /* Cor de fundo */
+    color: #fff; /* Cor do texto */
+    padding: 5px 5px; /* Padding */
+    border: none; /* Sem borda */
+    border-radius: 4px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de mão */
+    text-align: center; /* Alinhamento de texto */
+    text-decoration: none; /* Sem sublinhado */
+    display: inline-block; /* Display inline-block */
+    font-size: 12px; /* Tamanho da fonte */
+    margin: 4px 2px; /* Margem */
+    transition-duration: 0.2s; /* Transição suave */
+}
+ 
+.popup {
+  width: 220px;
+  display: none;  /* Inicialmente escondido */
+  position: fixed;
+  bottom: 120px;  /* Posição final */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fdb6ff;
+  color: black;
+  padding: 10px;
+  border-radius: 8px;
+  z-index: 1002;
+  box-shadow: 3px 3px 5px 0px #f583f0;
+  opacity: 0;  /* Inicialmente transparente */
+  animation: fadeInSlideUp 0.5s forwards;  /* Nome da animação, duração e direção */
+}
+
+@keyframes fadeInSlideUp {
+  0% {
+    opacity: 0;  /* Inicialmente transparente */
+    bottom: 100px;  /* Posição inicial */
+  }
+  100% {
+    opacity: 1;  /* Totalmente opaco */
+    bottom: 120px;  /* Posição final */
+  }
+}
+
+
+.popup.show {
+    display: block;
+}
+.btn-clear {
+    padding: 2px 8px;  /* Padding pequeno */
+    background-color: red;  /* Cor de fundo vermelha */
+    color: white;  /* Cor do texto branca */
+    border: none;  /* Sem borda */
+    border-radius: 4px;  /* Borda arredondada */
+    cursor: pointer;  /* Cursor do tipo pointer ao passar o mouse */
+}
+
+
+/* Efeito de hover para o botão */
+.btn-clear:hover {
+    background-color: darkred;  /* Cor de fundo mais escura ao passar o mouse */
+}
+
+   
+
+.btn-filtrar {
+    margin-top: 5px;
+    padding: 10px 20px;
+    text-align: center;
+    text-transform: uppercase;
+    background-size: 200% auto;
+    color: white;
+    border-radius: 10px;
+    display: block;
+    cursor: pointer;
+    font-size: 18px;
+    background-image: linear-gradient(45deg, #FF0000, #FF7F00, #FFFF00, #7FFF00, #00FF00, #00FF7F, #00FFFF, #007FFF, #0000FF, #7F00FF, #FF00FF, #FF007F);
+    animation: gradient 4s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.linha-separadora {
+    
+    width: 90%;  /* Define uma largura */
+    margin-left: auto;  /* Centraliza horizontalmente */
+    margin-right: auto;  /* Centraliza horizontalmente */
+    font-size: 1.5em;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 5px;
+    border-radius: 12px;  /* Aumenta o raio da borda para um visual mais arredondado */
+    text-align: center;
+    background: linear-gradient(135deg, #ffbc00, #e84b14);  /* Gradiente diagonal */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),  /* Sombra externa mais suave */
+                0 6px 20px rgba(0, 0, 0, 0.19);  /* Sombra externa mais dispersa */
+    color: #fff;  /* Cor do texto branco */
+    transition: all 0.3s ease;  /* Transição suave para hover */
+}
+
+.linha-separadora:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3),  /* Sombra externa mais forte no hover */
+                0 6px 20px rgba(0, 0, 0, 0.23);  /* Sombra externa mais dispersa no hover */
+}
+
+.nome-linha, .saiba-mais {
+    display: block;  /* Alterado para block para que ocupem a linha inteira */
+    text-align: center; /* Centraliza o texto */
+}
+
+
+.saiba-mais {
+    margin: 8px 25% 5px 25%;
+    padding: 4px 8px;  /* Espaçamento interno */
+    border-radius: 4px;  /* Borda arredondada */
+    background-color: rgba(255, 255, 255, 0.3);  /* Cor de fundo semi-transparente */
+    cursor: pointer;
+    color: #fff;  /* Cor do texto branco */
+    transition: all 0.3s ease;  /* Transição suave para hover */
+}
+
+.saiba-mais:hover {
+    background-color: rgba(255, 255, 255, 0.5);  /* Cor de fundo mais clara no hover */
+}
+
+
+.modal-confirmacao-zerar {
+  
+  display: none; /* Escondido por padrão */
+  position: fixed; /* Fica fixo na tela, sobre outros conteúdos */
+  left: 0;
+  top: 0;
+  width: 100%; /* Largura total */
+  height: 100%; /* Altura total */
+  background-color: rgba(0,0,0,0.5); /* Fundo preto com opacidade */
+  z-index: 1005; /* Alto z-index para ficar no topo */
+}
+
+.modal-content-zerar {
+  border-radius:15px;
+  position: relative;
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% do topo e centralizado horizontalmente */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Largura do conteúdo do modal */
+  z-index: 1005; /* z-index ainda mais alto para ficar acima do fundo escuro */
+}
+
+.modal-footer-zerar {
+  margin-top:25px;
+  text-align: center; /* Centraliza os botões no rodapé do modal */
+}
+
+
+.btn-confirmar-zerar, .btn-cancelar-zerar {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-confirmar-zerar {
+  border-radius:15px;
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+
+.btn-cancelar-zerar {
+  border-radius:15px;
+  background-color: #f44336; /* Red */
+  color: white;
+}
+
+

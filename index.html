@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+        <link rel="icon" href="/wp-content/uploads/favicon.ico" type="image/x-icon">  <!-- Adicionado aqui -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogo aneethum Tais</title>
+<link rel="stylesheet" href="style.css">
+    <!-- PapaParse -->
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+      
+
+</head>
+ 
+<body>
+
+<div id="loading-screen" class="loading-screen">
+    <img src="https://raw.githubusercontent.com/devlodi/catalogo_inacio_aneethum/main/imagens/aneethum%20logo%20tranparente(1).png" alt="Logo" class="loading-screen__logo"> <!-- Nova linha -->
+    <div class="loader"></div>
+    <p class="loading-screen__text">Oi tudo bem ? <br><br>Só um pouquinho, estou buscando os produtos para você.</p>
+</div>
+
+    
+     <div id="header">
+        <button class="btn" onclick="toggleCarrinho()">🛒Carrinho<span id="contador">0</span></button>
+        <button class="btn" onclick="abrirModalDúvidas()">Dúvidas ?</button>
+        <button class="btn" onclick="abrirModalFiltrar()">Filtrar Linhas</button>
+        <div id="detalhesCarrinho">
+            <!-- Os itens do carrinho e o total serão inseridos aqui pelo JavaScript -->
+        </div>
+    </div>
+
+<div class="instrucoes">
+    <img src="https://raw.githubusercontent.com/devlodi/catalogo_inacio_aneethum/main/imagens/lg_ane.webp" alt="Inacio" class="foto-inacio">
+    <p>Bem-vindo ao catálogo da Tais!</p>
+</div>
+
+    
+    <div id="produtos">
+    
+    <!-- Os produtos serão inseridos aqui pelo JavaScript -->
+</div>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModal()">&times;</span>
+        <p id="descricaoProduto"></p>
+    </div>
+</div>
+
+    <div id="popup" class="popup">
+    <span class="popup-text" id="popupText"></span>
+</div>
+
+    <div id="modalDúvidas" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModalDúvidas()">&times;</span>
+            <p>Aqui você pode ver todos os nossos produtos disponíveis. Para adicionar um item ao seu carrinho, basta clicar no botão "Colocar no Carrinho" abaixo do produto desejado. Você pode visualizar os itens no seu carrinho e o total da sua compra clicando no botão "Carrinho" no topo da página. Quando quiser me mandar os produtos que você quer, clique em "Mandar Pedido pelo WhatsApp" no carrinho para enviar o seu pedido via WhatsApp.</p>
+    </div>
+</div>
+
+    
+
+<!-- Modal para Filtragem de Linhas -->
+<div id="modalFiltrar" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModalFiltrar()">&times;</span>
+        <p>Quer ver quais linhas ?</p>
+        <div id="opcoesFiltragem">
+            <!-- As opções de filtragem serão inseridas aqui pelo JavaScript -->
+        </div>
+        <button class="btn-filtrar" onclick="aplicarFiltro()">FILTRAR</button>
+        <button class="btn-desmarcar" onclick="desmarcarTodas()">DESMARCAR TODAS</button> <!-- Classe exclusiva adicionada aqui -->
+    </div>
+</div>
+
+
+    <div id="modalInfoLinha" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModalInfoLinha()">&times;</span>
+        <p id="descricaoLinha"></p>
+    </div>
+</div>
+
+<!-- Modal para verificar carrinho -->
+<div id="verificarCarrinhoModal" class="modal modal-verificar-carrinho">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModalVerificarCarrinho()">&times;</span>
+    <h2>Hmm... parece que você tem algumas coisas no seu carrinho.</h2>
+    <p>O que você quer fazer?</p>
+    <button class="btn-modal" onclick="zerarCarrinho()">Zerar o carrinho</button>
+    <button class="btn-modal" onclick="manterCarrinho()">Manter</button>
+  </div>
+</div>
+
+    
+
+<div class="linha-separadora">
+    <div class="nome-linha">LINHA ${linha}</div>
+    <div class="saiba-mais" onclick="abrirModalInfoLinha('${linha}')">Saiba mais</div>
+</div>
+
+<!-- Modal de Confirmação de Zerar Carrinho -->
+<div id="modalConfirmacaoZerar" class="modal-confirmacao-zerar">
+  <div class="modal-content-zerar">
+    <h4>Confirmar Ação</h4>
+    <p>Tem certeza que deseja zerar seu carrinho?</p> <div class="modal-footer-zerar">
+    <a href="#!" class="btn-confirmar-zerar" onclick="confirmarZerarCarrinho()">Sim</a>
+    <a href="#!" class="btn-cancelar-zerar" onclick="fecharModalZerar()">Não</a>
+  </div>
+  </div>
+ 
+</div>
+
+
+
+    
+   <script type="text/javascript">     
+
+var carrinho;
+var total;
+
+carregarCarrinho();  // Mova esta linha para cima, antes das inicializações das variáveis
+
+function carregarCarrinho() {
+    var carrinhoSalvo = localStorage.getItem('carrinho');
+    if (carrinhoSalvo) {
+        carrinho = JSON.parse(carrinhoSalvo);
+        total = carrinho.reduce((soma, item) => soma + item.preco, 0);
+    } else {
+        carrinho = [];
+        total = 0;
+    }
+    
+    atualizarCarrinho();
+
+    // Verificar se o carrinho tem itens e abrir o modal, caso positivo
+    if (carrinho.length > 0) {
+        abrirModalVerificarCarrinho();
+    }
+}
+
+       
+       
+
+        function toggleCarrinho() {
+            var headerDiv = document.getElementById('header');
+            if (headerDiv.classList.contains('ativo')) {
+                headerDiv.classList.remove('ativo');
+            } else {
+                headerDiv.classList.add('ativo');
+            }
+        }
+
+        function parsePreco(preco) {
+            return parseFloat(preco.replace(',', '.').replace('R$ ', ''));
+        }
+
+function adicionarAoCarrinho(produto, preco) {
+    preco = parsePreco(preco);  // Converta a string de preço para um número
+    if (isNaN(preco)) {
+        console.error('Preço inválido:', preco);
+        return;
+    }
+    carrinho.push({ produto: produto, preco: preco });
+    total += preco;  // Adicione o preço ao total
+    document.getElementById('contador').innerText = carrinho.length;
+    atualizarCarrinho();
+    var indexMensagemAleatoria = Math.floor(Math.random() * mensagensCarrinho.length);
+    var mensagemAleatoria = mensagensCarrinho[indexMensagemAleatoria];
+    mostrarPopup(mensagemAleatoria);
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));  // Salve o carrinho no Local Storage
+}
+
+function removerDoCarrinho(index) {
+    total -= carrinho[index].preco;  // Subtrai o preço do item do total
+    carrinho.splice(index, 1);  // Remove o item do carrinho
+    atualizarCarrinho();
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));  // Salva o carrinho atualizado no Local Storage
+}
+
+function zerarCarrinho() {
+    mostrarModalZerar(); // Chama a função que mostra o modal
+}
+
+       
+
+       
+var mensagensCarrinho = [];  // Array para armazenar as mensagens do carrinho
+
+
+        function enviarPedido() {
+            var mensagem = encodeURIComponent("Oi Tais, quero estes produtos:\n\n" +
+                carrinho.map(item => `${item.produto} - R$ ${item.preco.toFixed(2)}`).join('\n\n') +
+                `\n\nTotal: R$ ${total.toFixed(2)}`);
+            window.open(`https://wa.me/5551984424822?text=${mensagem}`);
+        }
+
+function abrirModal(descricao) {
+    var modal = document.getElementById("myModal");
+    var descricaoProduto = document.getElementById("descricaoProduto");
+    descricaoProduto.innerText = decodeURIComponent(descricao);
+    modal.classList.add('show');
+}
+
+function fecharModal() {
+    var modal = document.getElementById("myModal");
+    modal.classList.remove('show');
+}
+
+function abrirModalDúvidas() {
+    var modal = document.getElementById("modalDúvidas");
+    modal.classList.add('show');
+}
+
+function fecharModalDúvidas() {
+    var modal = document.getElementById("modalDúvidas");
+    modal.classList.remove('show');
+}
+
+       
+
+function atualizarCarrinho() {
+    var detalhesCarrinho = document.getElementById('detalhesCarrinho');
+    var listaItens = '';
+    carrinho.forEach((item, index) => {
+        listaItens += `
+            <p>
+                ${item.produto} - R$ ${item.preco.toFixed(2)}
+                <span onclick="removerDoCarrinho(${index})" style="cursor:pointer;">&#128465;</span>
+            </p>`;
+    });
+    
+    var footerCarrinho = `
+        <p>Total: R$ ${total.toFixed(2)} <button class="btn-clear" onclick="zerarCarrinho()">Zerar Carrinho</button></p>
+        <button class="btn" onclick="enviarPedido()">Mandar Pedido pelo WhatsApp</button><br>
+    `;
+
+    detalhesCarrinho.innerHTML = `
+        <div class="lista-itens">
+            ${listaItens}
+        </div>
+        <div class="footer-carrinho">
+            ${footerCarrinho}
+        </div>
+    `;
+    document.getElementById('contador').innerText = carrinho.length;
+}
+
+
+
+
+
+
+
+       
+var timeoutId;  // Variável para armazenar o ID do temporizador
+
+function mostrarPopup(mensagem) {
+    // Cancelar o temporizador anterior, se houver
+    if (timeoutId) {
+        clearTimeout(timeoutId);
+    }
+
+    var popup = document.getElementById('popup');
+    var popupText = document.getElementById('popupText');
+    popupText.innerText = mensagem;
+
+    // Remove a classe 'show' e força o reflow para reiniciar a animação
+    popup.classList.remove('show');
+    void popup.offsetWidth;  // forçar reflow
+
+    // Adiciona a classe 'show' para iniciar a animação
+    popup.classList.add('show');
+
+    // Ocultar o pop-up após 5 segundos
+    timeoutId = setTimeout(function() {
+        popup.classList.remove('show');
+    }, 5000);
+}
+
+
+var informacoesLinhas = {}; 
+
+
+// ... (o código para carregar os produtos da planilha) ...
+// Adicionando a variável linhasUnicas
+var linhasUnicas = {};
+
+// ... (o código para carregar os produtos da planilha) ...
+Papa.parse('https://docs.google.com/spreadsheets/d/e/2PACX-1vTGy-7_SfKpf4b6HpIL2-f6JNugN8VPQPT_qfQb0gjoTn4qvh3Vyupbr4aVJcdmn1Sma3zlSYJQ0W_z/pub?output=csv', {
+    download: true,
+    header: true,
+    complete: function(results) {
+       
+        var data = results.data;
+        mensagensCarrinho = data.map(item => item.MSG_CARRINHO).filter(mensagem => mensagem && mensagem.trim());
+        var productsContainer = document.getElementById('produtos');
+        
+        for (var i = 0; i < data.length; i++) {
+            var linha = data[i].LINHA;
+            var passoAPasso = data[i].PASSO_A_PASSO;
+            
+            // Verifique se a linha já foi adicionada ao objeto linhasUnicas
+            if (!linhasUnicas[linha] && passoAPasso) {
+                linhasUnicas[linha] = passoAPasso;
+            }
+            
+            // Verificar se é um novo grupo de linha e, em caso afirmativo, adicionar um cabeçalho
+            if (i === 0 || data[i].LINHA !== data[i - 1].LINHA) {
+                productsContainer.innerHTML += `
+                    <div class="linha-separadora" id="header-${linha}">
+                        LINHA ${linha}
+                        <span class="saiba-mais" onclick="abrirModalInfoLinha('${linha}')">Saiba mais</span>
+                    </div>`;
+            }
+            
+            var descricaoEscapada = encodeURIComponent(data[i].DESCRIÇÃO);
+            var productCard = `
+                <div class="card">
+                    <img src="${data[i].IMAGEM}" alt="${data[i].PRODUTOS}">
+                    <h5 class="card-title">${data[i].PRODUTOS}</h5>
+                    <button class="btn-info" onclick="abrirModal('${encodeURIComponent(data[i].DESCRIÇÃO)}')">Mais Sobre</button>
+                    <p class="product-line">Linha: ${data[i].LINHA}</p>
+                    <p class="card-text">Preço ${data[i].PREÇO}</p>
+                    <button class="btn" onclick="adicionarAoCarrinho('${data[i].PRODUTOS}', '${data[i].PREÇO}')">Colocar no Carrinho</button>
+                </div>`;
+            productsContainer.innerHTML += productCard;
+            document.getElementById('loading-screen').style.display = 'none';
+        }
+        
+        // Agora, linhasUnicas contém uma entrada única para cada linha, juntamente com seu passo a passo
+        informacoesLinhas = linhasUnicas;
+        
+        atualizarOpcoesFiltragem();
+    }
+});
+
+
+
+function obterLinhasUnicas() {
+    var elementosLinhas = document.querySelectorAll('.product-line');
+    var linhas = [];
+    elementosLinhas.forEach(elemento => {
+        var linha = elemento.textContent.replace('Linha: ', '');
+        if (!linhas.includes(linha) && linha.trim() !== '') {
+            linhas.push(linha);
+        }
+    });
+    return linhas;
+}
+
+var checkboxes = [];  // Variável global para armazenar os checkboxes
+
+function atualizarOpcoesFiltragem() {
+    var linhas = obterLinhasUnicas();
+    var opcoesFiltragemDiv = document.getElementById('opcoesFiltragem');
+    opcoesFiltragemDiv.innerHTML = '';
+    linhas.forEach(linha => {
+        opcoesFiltragemDiv.innerHTML += `
+            <div>
+                <input type="checkbox" id="${linha}" checked>
+                <label for="${linha}">${linha}</label>
+            </div>`;
+    });
+    checkboxes = Array.from(document.querySelectorAll('#opcoesFiltragem input[type="checkbox"]'));  // Armazenar os checkboxes
+}
+
+function aplicarFiltro() {
+    var linhasSelecionadas = checkboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.id);
+    var cards = document.querySelectorAll('.card');
+    var headers = document.querySelectorAll('.linha-separadora');
+    
+    // Mostrar/Esconder cards
+    cards.forEach(card => {
+        var linhaProduto = card.querySelector('.product-line').textContent.replace('Linha: ', '');
+        if (linhasSelecionadas.includes(linhaProduto)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // Mostrar/Esconder cabeçalhos de linha
+    headers.forEach(header => {
+        var id = header.id.replace('header-', '');
+        if (linhasSelecionadas.includes(id)) {
+            header.style.display = 'block';
+        } else {
+            header.style.display = 'none';
+        }
+    });
+
+    fecharModalFiltrar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function desmarcarTodas() {
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+
+
+       // Suponha que esta função seja chamada após os produtos serem renderizados
+function produtosCarregados() {
+    atualizarOpcoesFiltragem();
+}
+
+       function abrirModalFiltrar() {
+    var modal = document.getElementById("modalFiltrar");
+    modal.classList.add('show');
+}
+
+function fecharModalFiltrar() {
+    var modal = document.getElementById("modalFiltrar");
+    modal.classList.remove('show');
+}
+
+function abrirModalInfoLinha(linha) {
+    // Agora informacoesLinhas deve ser acessível aqui
+    var modal = document.getElementById("modalInfoLinha");
+    var descricaoLinha = document.getElementById("descricaoLinha");
+    descricaoLinha.innerText = informacoesLinhas[linha] || "Informações não disponíveis";
+    modal.classList.add('show');
+}  // Chave de fechamento adicionada aqui
+
+
+
+function fecharModalInfoLinha() {
+    var modal = document.getElementById("modalInfoLinha");
+    modal.classList.remove('show');
+}
+
+function abrirModalVerificarCarrinho() {
+    const modal = document.getElementById('verificarCarrinhoModal');
+    modal.classList.add('show');
+}
+
+function fecharModalVerificarCarrinho() {
+    const modal = document.getElementById('verificarCarrinhoModal');
+    modal.classList.remove('show');
+}
+
+function manterCarrinho() {
+    // Sua lógica para manter os itens no carrinho aqui, se necessário
+    fecharModalVerificarCarrinho();
+}
+    
+function mostrarModalZerar() {
+  document.getElementById('modalConfirmacaoZerar').style.display = 'block';
+}
+
+function fecharModalZerar() {
+  document.getElementById('modalConfirmacaoZerar').style.display = 'none';
+}
+
+function confirmarZerarCarrinho() {
+  // Aqui você coloca a lógica atual que está dentro da sua confirmação atual
+  carrinho = [];
+  total = 0;
+  localStorage.setItem('carrinho', JSON.stringify(carrinho));
+  atualizarCarrinho();
+  fecharModalVerificarCarrinho();
+  fecharModalZerar(); // Fechar o modal de confirmação também
+}
+
+       
+    </script>
+
+</body>
+
+</html>
